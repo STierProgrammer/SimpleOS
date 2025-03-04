@@ -1,18 +1,21 @@
-mov ah, 0x0E ; BIOS teletype mode
-mov al, 65 ; ASCII code for 'A'
-int 0x10
+[org 0x7C00]
+mov ah, 0x0E
+mov bx, var_name
 
-loop: 
-    inc al
-    cmp al, 91
-    je exit
+print:
+    mov al, [bx] ; Dereference the pointer
+    cmp al, 0 ; Check if it's the null terminator
+    je end 
     int 0x10
-    jmp loop 
+    inc bx ; Move to the next character
+    jmp print
 
-exit:
+end:
     jmp $
 
 jmp $
+
+var_name: db "Hello, World!", 0
 
 times 510-($-$$) db 0
 db 0x55, 0xAA ; Boot signature
