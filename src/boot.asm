@@ -1,21 +1,12 @@
-[org 0x7C00]
-mov ah, 0x0E
-mov bx, var_name
+[org 0x7c00]
 
-print:
-    mov al, [bx] ; Dereference the pointer
-    cmp al, 0 ; Check if it's the null terminator
-    je end 
-    int 0x10
-    inc bx ; Move to the next character
-    jmp print
+start:
+    mov ah, 0x00  ; Wait for a key press
+    int 0x16
+    mov ah, 0x0E  ; BIOS teletype mode
+    int 0x10      ; Print the character
 
-end:
-    jmp $
-
-jmp $
-
-var_name: db "Hello, World!", 0
+    jmp start
 
 times 510-($-$$) db 0
-db 0x55, 0xAA ; Boot signature
+dw 0xAA55  ; Boot signature
